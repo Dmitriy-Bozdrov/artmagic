@@ -1245,6 +1245,20 @@
   max-height: 130px;
 }
 
+.aside-main__item.is-disabled {
+  opacity: 0.45;
+}
+
+.aside-main__item.is-disabled .aside-main__item__label {
+  cursor: not-allowed;
+}
+
+.aside-main__item__count {
+  color: #888;
+  font-size: 0.9em;
+  margin-left: 0.25em;
+}
+
 .footer__info {
   padding: 16px 24px;
   min-height: 10vh;

@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'mptt',
     'corsheaders',
     'rest_framework',
-    'django_filters',
     'django_ckeditor_5',
 
 

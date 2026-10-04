@@ -27,7 +27,7 @@ from .models import (Products,
                      Stocks)  # Обновлено
 from main.models import Carousel, ContactInfo, Informations
 from django.conf import settings
-from .filters import ProductsFilter
+from .filters import build_facet_options, filter_products
 from .utils import alphanumeric_sort, get_sorted_product_attributes
 
 
@@ -265,80 +265,52 @@ class SubProductView(View):
                 {'name': "Пошук", 'url': ''},  # Текущая категория
             ]
 
-        product_filter = ProductsFilter(request.GET, queryset=products)
-        filtered_queryset = product_filter.qs()
-        filtered_queryset = filtered_queryset.values('id', 'name', 'image', 'price', 'model')
-        filters = self.build_filters(filtered_queryset)
-        
+        is_filters_request = 'add-filters' in request.path
+        try:
+            page_number = max(1, int(request.GET.get('page', 1)))
+        except (TypeError, ValueError):
+            page_number = 1
 
-        if len(filtered_queryset)==0:
+        # Facets only change with filter/search selection, not pagination.
+        # Skip rebuild on page > 1 AJAX; frontend keeps the sidebar from page 1.
+        need_facets = not (is_filters_request and page_number > 1)
+        filters = build_facet_options(products, request.GET) if need_facets else None
+
+        filtered_queryset = filter_products(products, request.GET)
+        filtered_queryset = filtered_queryset.values('id', 'name', 'image', 'price', 'model')
+
+        # Пагинация
+        paginate_by = request.GET.get('productsPerPage', 10)
+        paginator = Paginator(filtered_queryset, paginate_by)
+        page_obj = paginator.get_page(page_number)
+
+        if is_filters_request:
+            products_data = list(page_obj)
+            for product in products_data:
+                if product['image']:
+                    product['image'] = "/media/" + product['image']
+            return JsonResponse({
+                'products': products_data,
+                'productsPerPage': paginator.per_page,
+                'productsAmount': paginator.count,
+                'currentPage': page_obj.number,
+                'filters': filters,
+            })
+
+        if paginator.count == 0:
             return render(request, 'products/not_find_products.html', {
                 'parent_category': parent_category,
                 'filters': filters,
                 'breadcrumbs': breadcrumbs,
                 'searchquery': searchquery,
             })
-        
-        # Пагинация
-        paginate_by = request.GET.get('productsPerPage', 10)
-        paginator = Paginator(filtered_queryset, paginate_by)
-        page_number = request.GET.get('page', 1)
-        page_obj = paginator.get_page(page_number)
-        
-        if 'add-filters' in request.path:
-        # if request.headers.get('Accept', '') == 'application/json':
-            products_data = list(page_obj)
-            for product in products_data:
-                if not product['image']:
-                    product['image']
-                else:
-                    product['image'] = "/media/" + product['image']
-            json_data = {
-                'products': products_data,
-                'productsPerPage': paginator.per_page,
-                'productsAmount': paginator.count,
-                'currentPage': page_obj.number,
-            }
-            return JsonResponse(json_data)
 
-
-        print('222', filters)
         return render(request, self.template_name, {
             'parent_category': parent_category,
             'filters': filters,
             'breadcrumbs': breadcrumbs,
             'searchquery': searchquery,
         })
-
-    def build_filters(self, products):
-        # Получаем ID продуктов
-        products_ids = products.values_list("pk", flat=True)
-
-        # Получаем все фильтры для этих продуктов
-        product_filters = ProductFilter.objects.filter(product__in=products_ids).select_related('filter_category', 'filter_value').distinct()
-
-        # Создаем словарь для фильтров
-        attributes_dict = {}
-
-        for pf in product_filters:
-            category_name = pf.filter_category.name
-            filter_id = pf.filter_value.id  # Получаем id фильтра
-            value = pf.filter_value.value  # Получаем значение фильтра
-
-            # Инициализируем список, если фильтров для этой категории еще нет
-            if category_name not in attributes_dict:
-                attributes_dict[category_name] = set()
-
-            # Добавляем кортеж (id, value) в соответствующую категорию
-            attributes_dict[category_name].add((filter_id, value))
-
-        # Преобразуем словарь в список фильтров
-        filters = [{
-            'name': name.upper(),
-            'text': sorted(list(texts), key=lambda x: alphanumeric_sort(x[1]))  # сортируем по value, а не по id
-        } for name, texts in sorted(attributes_dict.items(), key=lambda x: alphanumeric_sort(x[0]))]
-
-        return filters
 
 
 def get_new_arrivals(request):
