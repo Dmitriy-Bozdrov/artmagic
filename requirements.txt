@@ -7,7 +7,6 @@ pillow==10.3.0
 sqlparse==0.5.0
 typing-extensions==4.11.0
 tzdata==2024.1
-django-filter
 django-ckeditor-5
 python-dotenv
 psycopg2-binary

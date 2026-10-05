@@ -8,6 +8,7 @@ export class PageProducts {
         this.swiperWrapper = document.getElementById(containerId);
         this.productsLists = document.querySelectorAll(`.products-${this.pageName}__list`);
         this.filters = {};
+        this.filtersBound = false;
         this.basket.setPageName(pageName);
         this.swiperPagination = {
             productsPerPage: 12,
@@ -21,19 +22,55 @@ export class PageProducts {
     }
 
     async initializePage() {
-        // const { products, productsAmount, productsPerPage } = await this.fetchProducts(1);
-        // this.productsLists = this.renderProductsLists(productsAmount, productsPerPage);
-        
-        // const mappedProducts = this.mapProducts(products);
-        // this.renderProductItemsOnList(mappedProducts, 1);
-
-        // this.renderGroup10Buttons();
-        // this.renderPaginationBullets();
-        // this.setActivePaginationBullet(this.swiper.activeIndex);
+        this.bindFilterListeners();
         await this.applyFilters();
         
         this.basket.setPageName(this.pageName);
         this.basket.initialize();
+    }
+
+    bindFilterListeners() {
+        if (this.filtersBound) return;
+        document.querySelectorAll("[data-parent]").forEach((parent) => {
+            parent.addEventListener("change", this.handleCheckboxChange);
+        });
+        this.filtersBound = true;
+    }
+
+    updateFacets(filters) {
+        if (!Array.isArray(filters)) return;
+
+        const countsByCategory = {};
+        for (const group of filters) {
+            const map = {};
+            for (const option of group.text || []) {
+                map[String(option.id)] = option.count;
+            }
+            countsByCategory[group.name] = map;
+        }
+
+        document.querySelectorAll("[data-parent]").forEach((list) => {
+            const category = list.getAttribute("data-parent");
+            const counts = countsByCategory[category] || {};
+
+            list.querySelectorAll(".aside-main__item").forEach((item) => {
+                const input = item.querySelector('input[type="checkbox"]');
+                if (!input) return;
+
+                const optionId = String(input.dataset.child);
+                const count = Object.prototype.hasOwnProperty.call(counts, optionId)
+                    ? counts[optionId]
+                    : 0;
+                const countEl = item.querySelector(".aside-main__item__count");
+                if (countEl) {
+                    countEl.textContent = `(${count})`;
+                }
+
+                const shouldDisable = count === 0 && !input.checked;
+                input.disabled = shouldDisable;
+                item.classList.toggle("is-disabled", shouldDisable);
+            });
+        });
     }
 
     initSwiper(config) {
@@ -284,15 +321,15 @@ export class PageProducts {
     }
 
     applyFilters = async () => {
-        // Добваление слушателя, для формирования строки
-        document.querySelectorAll("[data-parent]").forEach(
-            async (parent) => parent.addEventListener("change", this.handleCheckboxChange));
+        this.bindFilterListeners();
         // Сброс текущих продуктов и пагинации
         this.swiperWrapper.innerHTML = "";
         this.swiperPagination.currentPageGroup = 0;
         // Получаем данные с новыми фильтрами
-        const { products, productsAmount, productsPerPage } = await this.fetchProducts(1);
-    
+        const { products, productsAmount, productsPerPage, filters } = await this.fetchProducts(1);
+
+        this.updateFacets(filters);
+
         // Обновляем листы продуктов и пагинацию
         this.productsLists = this.renderProductsLists(productsAmount, productsPerPage);
         const mappedProducts = this.mapProducts(products);
@@ -301,9 +338,8 @@ export class PageProducts {
         this.renderPaginationBullets();
         this.setActivePaginationBullet(this.swiper.activeIndex);
 
-        if(this.basket.handleBasketBtnsBuyInited)
+        if (this.basket.handleBasketBtnsBuyInited) {
             this.basket.initProductsBuyBtns(1);
-        
-        
+        }
     }
 }

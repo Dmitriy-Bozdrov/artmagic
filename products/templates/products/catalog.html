@@ -53,48 +53,34 @@
                 <section class="aside">
                     <div class="aside-catalog__content">
                         {% for filter in  filters  %}
-                        <div class="accordion" id="accordionFilters">
+                        <div class="accordion">
                             <div class="accordion-item">
                                 <p class="accordion-header">
-                                  {% if forloop.counter == 1 %}    
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#{{forloop.counter}}" aria-expanded="true" aria-controls="{{forloop.counter}}">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#filter-{{ forloop.counter }}" aria-expanded="true" aria-controls="filter-{{ forloop.counter }}">
                                         {{ filter.name }}
                                     </button>
-                                  {% else %}
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{forloop.counter}}" aria-expanded="true" aria-controls="{{forloop.counter}}">
-                                        {{ filter.name }}
-                                    </button>
-                                  {% endif %}
                                 </p>
-                                {% if forloop.counter == 1 %}
-                                    <div id="{{forloop.counter}}" class="accordion-collapse collapse show" data-bs-parent="#accordionFilters">
-                                        <div class="accordion-body">
-                                        <ul class="aside-mainlist" data-parent="{{filter.name}}">
+                                <div id="filter-{{ forloop.counter }}" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
+                                        <ul class="aside-mainlist" data-parent="{{ filter.name }}">
                                             {% for value in filter.text %}
-                                                <li class="aside-main__item">
-                                                    <input id="{{filter.name}}{{value.0}}" type="checkbox" data-child="{{value.0}}"/>
-                                                    <label class="aside-main__item__label" for="{{filter.name}}{{value.0}}">{{ value.1 }}</label>
+                                                <li class="aside-main__item{% if value.count == 0 %} is-disabled{% endif %}">
+                                                    <input
+                                                        id="{{ filter.name }}{{ value.id }}"
+                                                        type="checkbox"
+                                                        data-child="{{ value.id }}"
+                                                        {% if value.count == 0 %}disabled{% endif %}
+                                                    />
+                                                    <label class="aside-main__item__label" for="{{ filter.name }}{{ value.id }}">
+                                                        {{ value.label }}
+                                                        <span class="aside-main__item__count">({{ value.count }})</span>
+                                                    </label>
                                                 </li>
-                                        {% endfor %}
+                                            {% endfor %}
                                         </ul>
-                                        </div>
                                     </div>
-                                {% else %}
-                                    <div id="{{forloop.counter}}" class="accordion-collapse collapse" data-bs-parent="#accordionFilters">
-                                        <div class="accordion-body">
-                                        <ul class="aside-mainlist" data-parent="{{filter.name}}">
-                                            {% for value in filter.text %}
-                                                <li class="aside-main__item">
-                                                    <input id="{{filter.name}}{{value.0}}" type="checkbox" data-child="{{value.0}}"/>
-                                                    <label class="aside-main__item__label" for="{{filter.name}}{{value.0}}">{{ value.1 }}</label>
-                                                </li>
-                                        {% endfor %}
-                                        </ul>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                                
-                              </div>
+                                </div>
+                            </div>
                         </div>
                         {% endfor %}
                             <!-- <div class="aside-catalog__search">
@@ -124,48 +110,34 @@
             <div class="offcanvas-body">
                 <div class="aside-catalog__content">
                     {% for filter in  filters  %}
-                    <div class="accordion" id="accordionFilters">
+                    <div class="accordion">
                         <div class="accordion-item">
                             <p class="accordion-header">
-                              {% if forloop.counter == 1 %}    
-                                <button class="accordion-button"  type="button" data-bs-toggle="collapse" data-bs-target="#{{forloop.counter}}" aria-expanded="true" aria-controls="{{forloop.counter}}">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#filter-mobile-{{ forloop.counter }}" aria-expanded="true" aria-controls="filter-mobile-{{ forloop.counter }}">
                                     {{ filter.name }}
                                 </button>
-                              {% else %}
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{forloop.counter}}" aria-expanded="true" aria-controls="{{forloop.counter}}">
-                                    {{ filter.name }}
-                                </button>
-                              {% endif %}
                             </p>
-                            {% if forloop.counter == 1 %}
-                                <div id="{{forloop.counter}}" class="accordion-collapse collapse show" data-bs-parent="#accordionFilters">
-                                    <div class="accordion-body" id="{{filter.name}}">
-                                    <ul class="aside-mainlist" data-parrent="{{filter.name}}">
+                            <div id="filter-mobile-{{ forloop.counter }}" class="accordion-collapse collapse show">
+                                <div class="accordion-body" id="{{ filter.name }}">
+                                    <ul class="aside-mainlist" data-parent="{{ filter.name }}">
                                         {% for value in filter.text %}
-                                            <li class="aside-main__item">
-                                                <input id="{{filter.name}}{{value.0}}" type="checkbox" data-child="{{value.0}}" />
-                                                <label class="aside-main__item__label" for="{{filter.name}}{{value.0}}">{{ value.1 }}</label>
+                                            <li class="aside-main__item{% if value.count == 0 %} is-disabled{% endif %}">
+                                                <input
+                                                    id="mobile-{{ filter.name }}{{ value.id }}"
+                                                    type="checkbox"
+                                                    data-child="{{ value.id }}"
+                                                    {% if value.count == 0 %}disabled{% endif %}
+                                                />
+                                                <label class="aside-main__item__label" for="mobile-{{ filter.name }}{{ value.id }}">
+                                                    {{ value.label }}
+                                                    <span class="aside-main__item__count">({{ value.count }})</span>
+                                                </label>
                                             </li>
                                         {% endfor %}
                                     </ul>
-                                    </div>
                                 </div>
-                            {% else %}
-                                <div id="{{forloop.counter}}" class="accordion-collapse collapse" data-bs-parent="#accordionFilters">
-                                    <div class="accordion-body" id="{{filter.name}}" >
-                                    <ul class="aside-mainlist" data-parrent="{{filter.name}}">
-                                        {% for value in filter.text %}
-                                            <li class="aside-main__item">
-                                                <input id="{{filter.name}}{{value.0}}" type="checkbox" data-child="{{value.0}}"/>
-                                                <label class="aside-main__item__label" for="{{filter.name}}{{value.0}}">{{ value.1 }}</label>
-                                            </li>
-                                    {% endfor %}
-                                    </ul>
-                                    </div>
-                                </div>
-                            {% endif %}
-                            
-                          </div>
+                            </div>
+                        </div>
                     </div>
                     {% endfor %}
                         <!-- <div class="aside-catalog__search">
