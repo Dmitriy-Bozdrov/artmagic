@@ -96,6 +96,16 @@
   color: #777;
 }
 
+.footer__admin-link {
+  display: inline-block;
+  margin: 0 16px;
+  line-height: 1;
+}
+
+.footer__admin-link .lock-small {
+  margin: 0;
+}
+
 .bg8 {
   background-color: #777;
 }

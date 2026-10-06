@@ -20,10 +20,12 @@ const toggleCatalogHeader = (e) => {
 
 // for sidemenu
 const openNav = () => {
-  document.getElementById("mySidenav").style.width = "400px";
+  const nav = document.getElementById("mySidenav");
   const fullContent = document.querySelector('.full-content');
-  fullContent.style.marginLeft = "400px";
-  fullContent.style.opacity = "0.8";
+  const mobileHome = document.body.classList.contains("page-home") && window.innerWidth <= 900;
+  nav.style.width = mobileHome ? "100%" : "400px";
+  fullContent.style.marginLeft = mobileHome ? "0" : "400px";
+  fullContent.style.opacity = mobileHome ? "1" : "0.8";
 }
 
 /* Set the width of the side navigation to 0 and the left margin of the page content to 0, and the background color of body to white */

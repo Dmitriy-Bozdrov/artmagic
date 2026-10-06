@@ -51,7 +51,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
     <link rel="stylesheet" href="{% static 'node_modules/aos/dist/aos.css' %}">
-    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'css/common.css' %}?v=2">
     <link rel="stylesheet" href="{% static 'css/breadcrumb.css' %}">
     {% block css %}{% endblock %}    
 </head>
@@ -359,10 +359,11 @@
             <div class="footer__bottom container__custom">
                 <div class="footer__underground">
                     <p class="footer__underground__text">
-                        Artmagic - товари для художників та творчості © 2008 
-                        <a id="adminLink">
+                        Artmagic - товари для художників та творчості © 2008
+                        <a id="adminLink" class="footer__admin-link" aria-label="Вхід для адміністратора">
                             <i class="fa fa-lock lock-small c8"></i>
-                        </a>{{ year }}.
+                        </a>
+                        {{ year }}.
                     </p>
                 </div>
             </div>
@@ -534,7 +535,7 @@
             once: true
         });
     </script>
-    <script src="{% static 'js/common/constants.js' %}"></script>
+    <script src="{% static 'js/common/constants.js' %}?v=3"></script>
     <script src="{% static 'js/common/bone.js' %}"></script>
     <script src="{% static 'js/classes/product.js' %}"></script>
     <script type="module" src="{% static 'js/classes/product-manager.js' %}"></script>
@@ -549,7 +550,7 @@
     <script type="module" src="{% static 'js/header/basket/delivery.js' %}?v=2"></script>
     <script src="{% static 'js/header/feedback/feedback.js' %}"></script>
     <script src="{% static 'js/header/burger-menu/burger-menu.js' %}"></script>
-    <script src="{% static 'js/header/sidenav/sidenav.js' %}"></script>
+    <script src="{% static 'js/header/sidenav/sidenav.js' %}?v=2"></script>
     <script type="module" src="{% static 'js/header/search/search.js' %}"></script>
     <script type="module" src="{% static 'js/import.js' %}"></script>
     <script type="module" src="{% static 'js/classes/page-products.js' %}"></script>

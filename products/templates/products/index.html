@@ -6,21 +6,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}?v=6">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}?v=18">
 {% endblock %}
 
 {% block content %}
 <div class="home">
     <section class="home-hero">
+        <div class="home-hero__stage">
+        <p class="home-hero__year" aria-hidden="true">2008</p>
         <div class="home-hero__copy">
             <p class="home-kicker">Майстерня з 2008</p>
-            <h1>Все, щоб продовжити малювати</h1>
+            <h1>Все, щоб продовжити <em>малювати</em></h1>
             <p class="home-hero__lead">Фарби, папір, полотна й інструменти — зібрані так, щоб їх було легко знайти і взяти в роботу.</p>
             <div class="home-actions">
-                {% if categories %}
-                    <a class="home-btn" href="{{ categories.0.get_absolute_url }}">До каталогу</a>
-                {% endif %}
                 <a class="home-textlink" href="#novynky">Новинки</a>
+                <p class="home-hero__hours">Дніпро · Пн–Пт 9:30–17:30</p>
             </div>
         </div>
         <div class="home-hero__visual">
@@ -36,7 +36,7 @@
                 </div>
                 <div class="swiper-pagination"></div>
             </section>
-            <p class="home-hero__hours">Дніпро · Пн–Пт 9:30–17:30</p>
+        </div>
         </div>
     </section>
 
