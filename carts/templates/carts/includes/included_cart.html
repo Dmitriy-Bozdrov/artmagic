@@ -5,8 +5,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <p class="modal-title">Кошик</p>
-                <button type="button" class="btn btn-primary text-center" data-bs-dismiss="modal" aria-label="Close" style="position: relative; right: 15px;">До покупок</button>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="margin: 0;"></button>
+                <div class="basket__header-actions">
+                    <button type="button" class="basket__continue" data-bs-dismiss="modal">До покупок</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
             </div>
             <div class="modal-body basket__modal__body" >
                 <div class="swiper basket__modal__swiper">
@@ -20,12 +22,12 @@
                             <div class="order-choose">
                                 <p class="order-choose__title">Оберіть спосіб доставки</p>
                                 <div class="order-choose__delivery">
-                                    <input class="card-input" id="artmagic_department" name="delivery" checked="true" type="radio">
+                                    <input class="card-input" id="artmagic_department" name="delivery" type="radio">
                                     <label class="card-input__icon-wrap" for="artmagic_department">
                                         <img class="card-input__icon artmagic_department c8" data-delivery="artmagic_department" src="{% static 'assets/basket-icons/artmagic.png' %}" fill="currentColor" alt="">
                                         <p>Самовивіз</p>
                                     </label>
-                                    <input class="card-input" id="new_post_department" name="delivery" checked="true" type="radio">
+                                    <input class="card-input" id="new_post_department" name="delivery" type="radio">
                                     <label class="card-input__icon-wrap" for="new_post_department">
                                         <svg class="card-input__icon c8" data-delivery="new_post_department" version="1.0" xmlns="http://www.w3.org/2000/svg"
                                             width="500.000000pt" height="500.000000pt" viewBox="0 0 500.000000 500.000000">
@@ -46,7 +48,7 @@
                                         </svg>
                                         <p>Відділення</p>
                                     </label>
-                                    <input class="card-input" id="new_post_packing" name="delivery" checked="true" type="radio">
+                                    <input class="card-input" id="new_post_packing" name="delivery" type="radio">
                                     <label class="card-input__icon-wrap" for="new_post_packing">
                                         <svg class="card-input__icon c8" data-delivery="new_post_packing" version="1.0" xmlns="http://www.w3.org/2000/svg"
                                             width="500.000000pt" height="500.000000pt" viewBox="0 0 500.000000 500.000000"
@@ -68,7 +70,7 @@
                                         </svg>
                                         <p>Поштомат</p> 
                                     </label>
-                                    <input class="card-input" id="new_post_address" name="delivery" checked="true" type="radio">
+                                    <input class="card-input" id="new_post_address" name="delivery" type="radio">
                                     <label class="card-input__icon-wrap" for="new_post_address">
                                         <svg class="card-input__icon c8" data-delivery="new_post_address" version="1.0" xmlns="http://www.w3.org/2000/svg"
                                             width="500.000000pt" height="500.000000pt" viewBox="0 0 500.000000 500.000000"
@@ -209,13 +211,21 @@
                                         </select>
                                         <p data-error="city" class="error-message-hidden"></p>
                                     </div>
-                                    <div class="order__input__wrap">
-                                        <select class="order__input" 
+                                    <div class="order__input__wrap department-picker">
+                                        <select class="order__input department-picker__native"
                                         data-field="department"
-                                        type="text"
+                                        tabindex="-1"
+                                        aria-hidden="true"
                                         >
                                             <option value="null">-- Оберіть Відділення --</option>
                                         </select>
+                                        <input class="order__input department-picker__query"
+                                        type="search"
+                                        placeholder="Номер або адреса відділення"
+                                        autocomplete="off"
+                                        aria-label="Пошук відділення або поштомата"
+                                        >
+                                        <ul class="department-picker__list" hidden></ul>
                                         <p data-error="department" class="error-message-hidden"></p>
                                     </div>
                                 </div>
