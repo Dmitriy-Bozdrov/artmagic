@@ -13,12 +13,19 @@ export class PageProducts {
         this.swiperPagination = {
             productsPerPage: 12,
             currentPageGroup: 0,
-            buttonsPerGroup: 10,
+            buttonsPerGroup: window.innerWidth <= 700 ? 5 : 10,
             totalPageGroups: 0,
             previousPageIndex: 0
         }
         this.swiper = this.initSwiper();
         this.setupSwiperEvents();
+        window.addEventListener("resize", () => {
+            const prev = this.swiperPagination.buttonsPerGroup;
+            const next = window.innerWidth <= 700 ? 5 : 10;
+            if (prev === next) return;
+            this.renderPaginationBullets();
+            if (this.swiper) this.setActivePaginationBullet(this.swiper.activeIndex);
+        });
     }
 
     async initializePage() {
@@ -133,7 +140,15 @@ export class PageProducts {
         this.basket.addEventToDetailePage(productsList);
     }
 
+    syncPaginationGroupSize() {
+        const nextSize = window.innerWidth <= 700 ? 5 : 10;
+        this.swiperPagination.buttonsPerGroup = nextSize;
+        const index = this.swiper ? this.swiper.activeIndex : 0;
+        this.swiperPagination.currentPageGroup = Math.floor(index / nextSize);
+    }
+
     renderPaginationBullets() {
+        this.syncPaginationGroupSize();
         const pagination = document.querySelector("div.pagination");
         pagination.innerHTML = "";
 
@@ -155,6 +170,10 @@ export class PageProducts {
 
         const prevGroupBtn = document.querySelector(`.btn-prev-${this.pageName}-10`) ?? null;
         const nextGroupBtn = document.querySelector(`.btn-next-${this.pageName}-10`) ?? null;
+
+        const step = this.swiperPagination.buttonsPerGroup;
+        if (prevGroupBtn) prevGroupBtn.textContent = `${step} prev`;
+        if (nextGroupBtn) nextGroupBtn.textContent = `${step} next`;
 
         if(prevGroupBtn && nextGroupBtn){
             prevGroupBtn.disabled = this.swiperPagination.currentPageGroup === 0;
@@ -178,9 +197,10 @@ export class PageProducts {
         prevGroupBtn.classList.add(`btn-prev-${this.pageName}-10`, "btn", "btn-primary");
         prevGroupBtn.textContent = "10 prev";
         prevGroupBtn.addEventListener("click", async () => {
+            const step = this.swiperPagination.buttonsPerGroup;
             this.swiperPagination.currentPageGroup -= 1;
             this.renderPaginationBullets();
-            this.swiper.slideTo(this.swiper.activeIndex - 10);
+            this.swiper.slideTo(Math.max(0, this.swiper.activeIndex - step));
         });
 
         swiperContainer.prepend(prevGroupBtn);
@@ -189,9 +209,10 @@ export class PageProducts {
         nextGroupBtn.classList.add(`btn-next-${this.pageName}-10`, "btn", "btn-primary");
         nextGroupBtn.textContent = "10 next";
         nextGroupBtn.addEventListener("click", async () => {
+            const step = this.swiperPagination.buttonsPerGroup;
             this.swiperPagination.currentPageGroup += 1;
             this.renderPaginationBullets();
-            this.swiper.slideTo(this.swiper.activeIndex + 10);
+            this.swiper.slideTo(this.swiper.activeIndex + step);
         });
 
         swiperContainer.append(nextGroupBtn);

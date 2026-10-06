@@ -3,7 +3,11 @@
 {% load mptt_tags %}
 
     {% block css %}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/category.css' %}">
+        <link rel="stylesheet" href="{% static 'css/home.css' %}?v=29">
     {% endblock %}
         {% block head %}
             <title>{{parent_category}} — купити в Дніпрі | інтернет-магазині Артмагія</title>
@@ -19,78 +23,52 @@
             {% endif %}
         {% endblock %}
         {% block content %}
-        <div class="main-category__wrap container__custom">
-            <main class="main-category">                               
-                <section data-aos="fade-down" class="category-others">
-                    <div class="category-others">
-                        <ul class="category-others__list">
-                            {% for sub_category in sub_categories %}
-                            <li class="category-others__item">
-                                <a class="category-others__link" href="{% url 'sub_product' slug=sub_category.slug %}">
-                                    <div class="category-others__img__wrap">
-                                        {% if sub_category.image %}
-                                        <img class="category-others__img" src="{{ sub_category.image.url }}" alt="{{ sub_category.name }}">
-                                        {% else %}
-                                        <!-- Если изображение отсутствует, вы можете добавить здесь замену или оставить пустым -->
-                                        <img class="category-others__img" src="{% static 'product-placeholder.png' %}" alt="No Image">
-                                        {% endif %}
-                                    </div>
-                                    <span class="category-others__link__text">{{ sub_category.name }}</span>
-                                </a>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+        <div class="home">
+            <section class="home-explore" aria-label="{{ parent_category.name }}">
+                {% if sub_categories %}
+                <div class="home-explore__grid home-explore__grid--sub">
+                    {% for sub_category in sub_categories %}
+                        <a class="home-tile home-tile--sub" href="{% url 'sub_product' slug=sub_category.slug %}">
+                            {% if sub_category.image %}
+                                <img src="{{ sub_category.image.url }}" alt="">
+                            {% else %}
+                                <span class="home-tile__fallback" aria-hidden="true"></span>
+                            {% endif %}
+                            <span class="home-tile__name">{{ sub_category.name }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </section>
+
+            <section class="products-category">
+                <div class="home-section__head">
+                    <h2>Товари</h2>
+                </div>
+                <div class="swiper products-category__carousel">
+                    <div class="swiper-wrapper" id="productsCategoryContainer"></div>
+                    <div class="pagination pagination-category"></div>
+                </div>
+            </section>
+
+            {% if parent_category.description %}
+                <section class="home-note">
+                    <h2>Опис категорії</h2>
+                    <div class="home-note__text">{{ parent_category.description|safe }}</div>
                 </section>
-                <section class="products-category">
-                    <div class="divider"></div>
-                    <div class="swiper products-category__carousel">
-                        <div class="swiper-wrapper" id="productsCategoryContainer">
-                            <!-- {% for product_group in products_by_sub_category %}
-                                <div class="swiper-slide">
-                                    <div class="products-category__list" data-aos="fade-down" data-aos-delay="300">
-                                        {% for product in product_group %}
-                                            <div class="products-category__item product-item" id="{{ product.pk }}">
-                                                <div class="products-category__item__img__wrap">
-                                                    {% if product.image %}
-                                                        <img class="products-category__item__img" src="{{ product.image.url }}" alt="{{ product.name }}">
-                                                    {% else %}
-                                                        <img class="products-category__item__img" src="{% static 'placeholder_image.jpg' %}" alt="No Image">
-                                                    {% endif %}
-                                                </div>
-                                                <p class="products-category__item__title">{{ product.name }}</p>
-                                                <span class="products-category__item__price">{{ product.price }} грн</span>
-                                                <button class="btn btn-primary products-category__item__btn" data-item="product_btn">Купити</button>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>  
-                            {% endfor %} -->
-                        </div>
-                        <div class="pagination pagination-category"></div>
-                    </div>
-                    <div class="category-others">
-                        {% if parent_category.description %}
-                            <div class="card">
-                            <p class="card-header fw-medium fs-4">
-                                Опис категорії
-                            </p>
-                            <div class="card-body">
-                                <p class="card-text">{{ parent_category.description|safe }}</p>
-                            </div>
-                            </div>
-                        {% endif %}
-                    </div>
-                </section>
-        
-            </main>
-        </div>
+            {% endif %}
         </div>
 
+        <nav class="home-tabbar" aria-label="Швидка навігація">
+            <a href="/">Головна</a>
+            <button type="button" onclick="openNav()">Каталог</button>
+            <button type="button" data-home-focus="search">Пошук</button>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#basket__modal">Кошик</button>
+        </nav>
       {% endblock %}
       {% block js %}
         <script src="{% static 'js/category/category.js' %}"></script>
-        <script type="module" src="{% static 'js/category/category-carousel.js' %}"></script>
+        <script type="module" src="{% static 'js/category/category-carousel.js' %}?v=2"></script>
         <script type="application/ld+json">
             {
               "@context": "https://schema.org",

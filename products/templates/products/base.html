@@ -55,7 +55,7 @@
     <link rel="stylesheet" href="{% static 'css/breadcrumb.css' %}">
     {% block css %}{% endblock %}    
 </head>
-<body class="{% if request.path == '/' %}page-home{% endif %}">
+<body class="{% if request.path == '/' or request.resolver_match.url_name == 'sub_categories' %}page-home{% endif %}{% if request.resolver_match.url_name == 'sub_categories' %} page-category{% endif %}">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TTCR5DCX"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -269,7 +269,7 @@
 <footer class="footer">
             <div class="footer__list container__custom">
                 <div class="footer__info">
-                    <p class="footer__info__title fw-medium fs-4">Інформація про компанію</p>
+                    <p class="footer__info__title">Компанія</p>
                     <ul class="footer__info__list">
                         <li class="footer__info__item">
                             <a class="footer__info__link" href="{% url 'main:about_detail' %}">Про нас</a>
@@ -280,7 +280,7 @@
                     </ul>
                 </div>
                 <div class="footer__help">
-                    <p class="footer__help__title fw-medium fs-4">Допомога</p>
+                    <p class="footer__help__title">Допомога</p>
                     <ul class="footer__help__list">
                         <li class="footer__help__item">
                             <a class="footer__help__link" href="{% url 'main:payment_delivery_detail' %}">Оплата і доставка</a>
@@ -289,22 +289,18 @@
                             <a class="footer__help__link" href="{% url 'main:safeguards_detail' %}">Договір оферти</a>
                         </li>
                         <li class="footer__help__item">
-                            <a class="footer__help__link" href="{% url 'main:return_agoods_detail' %}">Обмін і повернення товару</a>
+                            <a class="footer__help__link" href="{% url 'main:return_agoods_detail' %}">Обмін і повернення</a>
                         </li>
                     </ul>
                 </div>
                 <div class="footer__payment">
-                    <p class="footer__payment__title fw-medium fs-4">
-                        Ми приймаємо
-                    </p>
+                    <p class="footer__payment__title">Приймаємо</p>
                     <div class="footer__payment__img__wrap">
                         <img class="footer__payment__img" src="{% static 'assets/payment.png' %}" alt="">
                     </div>
                 </div>
                 <div class="footer__social">
-                    <p class="footer__social__title fw-medium fs-4">
-                        Ми у соцмережах
-                    </p>
+                    <p class="footer__social__title">Соцмережі</p>
                     <div class="footer__social__list">
                         <a class="footer__social__link bg18" href="https://www.facebook.com/artmagic.com.ua/">
                             <svg class="footer__social__svg" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 320 512">
@@ -359,11 +355,13 @@
             <div class="footer__bottom container__custom">
                 <div class="footer__underground">
                     <p class="footer__underground__text">
-                        Artmagic - товари для художників та творчості © 2008
-                        <a id="adminLink" class="footer__admin-link" aria-label="Вхід для адміністратора">
-                            <i class="fa fa-lock lock-small c8"></i>
-                        </a>
-                        {{ year }}.
+                        Artmagic — товари для художників та творчості
+                        <span class="footer__copy-years">© 2008
+                            <a id="adminLink" class="footer__admin-link" aria-label="Вхід для адміністратора">
+                                <i class="fa fa-lock lock-small c8"></i>
+                            </a>
+                            {{ year }}
+                        </span>
                     </p>
                 </div>
             </div>

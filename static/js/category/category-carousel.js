@@ -1,5 +1,5 @@
 import { Swiper, Navigation, Pagination } from "../import.js";
-import { PageProducts } from "../classes/page-products.js";
+import { PageProducts } from "../classes/page-products.js?v=2";
 import { basket } from "../header/basket/basket.js";
 
 const pageName = "category";
