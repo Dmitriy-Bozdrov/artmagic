@@ -3,11 +3,7 @@
 {% load mptt_tags %}
 
     {% block css %}
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/category.css' %}">
-        <link rel="stylesheet" href="{% static 'css/home.css' %}?v=36">
     {% endblock %}
         {% block head %}
             <title>{{parent_category}} — купити в Дніпрі | інтернет-магазині Артмагія</title>
@@ -29,11 +25,6 @@
                 <div class="home-explore__grid home-explore__grid--sub">
                     {% for sub_category in sub_categories %}
                         <a class="home-tile home-tile--sub" href="{% url 'sub_product' slug=sub_category.slug %}">
-                            {% if sub_category.image %}
-                                <img src="{{ sub_category.image.url }}" alt="">
-                            {% else %}
-                                <span class="home-tile__fallback" aria-hidden="true"></span>
-                            {% endif %}
                             <span class="home-tile__name">{{ sub_category.name }}</span>
                         </a>
                     {% endfor %}

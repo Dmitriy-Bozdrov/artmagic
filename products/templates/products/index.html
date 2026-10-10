@@ -2,40 +2,24 @@
 {% load static %}
 
 {% block css %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}?v=36">
 {% endblock %}
 
 {% block content %}
 <div class="home">
     <section class="home-hero">
         <div class="home-hero__stage">
-        <p class="home-hero__year" aria-hidden="true">2008</p>
         <div class="home-hero__copy">
-            <p class="home-kicker">Майстерня з 2008</p>
-            <h1>Все, щоб продовжити <em>малювати</em></h1>
+            <h1>Ваш шлях<br>від ескізу<br>до <em>шедевра</em></h1>
             <p class="home-hero__lead">Фарби, папір, полотна й інструменти — зібрані так, щоб їх було легко знайти і взяти в роботу.</p>
-            <div class="home-actions">
-                <a class="home-textlink" href="#novynky">Новинки</a>
-                <p class="home-hero__hours">Дніпро · Пн–Пт 9:30–17:30</p>
-            </div>
         </div>
         <div class="home-hero__visual">
-            <section class="swiper main-index__banner">
-                <div class="swiper-wrapper main-index__banner__list">
-                    {% for slide in carousel %}
-                        <div class="swiper-slide main-index__banner__slide">
-                            <div class="main-index__banner__slide__img__wrap">
-                                <img class="main-index__banner__slide__img" src="{{ slide.image.url }}" alt="{{ slide.title|default:'Артмагія' }}">
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-                <div class="swiper-pagination"></div>
-            </section>
+            <p class="home-hero__hours">
+                <span><i>Пн–Пт</i> <b>09:30–17:30</b></span>
+                <span><i>Сб</i> <b>10:00–15:00</b></span>
+                <span class="is-off"><i>Нд</i> <b>вихідний</b></span>
+            </p>
+            <img class="home-hero__photo" src="{% static 'assets/home/hero.jpg' %}?v=6" alt="">
         </div>
         </div>
     </section>
@@ -43,17 +27,13 @@
     {% if categories %}
     <section class="home-explore" aria-labelledby="home-explore-title">
         <div class="home-section__head">
-            <h2 id="home-explore-title">Зайти глибше</h2>
-            <p>Оберіть напрям — далі відкриються підрозділи з фото.</p>
+            <h2 id="home-explore-title">Каталог</h2>
+            <p>Оберіть напрям — далі відкриються підрозділи.</p>
         </div>
         <div class="home-explore__grid">
             {% for category in categories %}
                 <a class="home-tile" href="{{ category.get_absolute_url }}">
-                    {% if category.home_image %}
-                        <img src="{{ category.home_image.url }}" alt="">
-                    {% else %}
-                        <span class="home-tile__fallback" aria-hidden="true"></span>
-                    {% endif %}
+                    <img src="{% static 'assets/home/categories/' %}{{ category.slug }}.jpg" alt="{{ category.name }}">
                     <span class="home-tile__name">{{ category.name }}</span>
                 </a>
             {% endfor %}
@@ -107,5 +87,5 @@
 
 {% block js %}
     <script src="{% static 'js/index/index.js' %}?v=5"></script>
-    <script type="module" src="{% static 'js/index/index-carousel.js' %}?v=4"></script>
+    <script type="module" src="{% static 'js/index/index-carousel.js' %}?v=5"></script>
 {% endblock %}

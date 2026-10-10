@@ -98,7 +98,8 @@ const { mainBanner } = {
   modules: [Navigation, Pagination]
 }
 
-new Swiper(`.main-${pageName}__banner`, mainBanner);
+const mainBannerEl = document.querySelector(`.main-${pageName}__banner`);
+if (mainBannerEl) new Swiper(mainBannerEl, mainBanner);
 
 new IndexProducts(pageName, "productsIndexContainer", `.products-${pageName}__list__wrap`, basket)
 
