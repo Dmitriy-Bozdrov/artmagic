@@ -1,6 +1,6 @@
 import { Swiper, Navigation, Pagination } from "../import.js";
 import { PageProducts } from "../classes/page-products.js?v=2";
-import { basket } from "../header/basket/basket.js";
+import { basket } from "../header/basket/basket.js?v=4";
 
 const pageName = "category";
 

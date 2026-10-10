@@ -4,6 +4,7 @@ export class Basket {
         this.productsContainer = document.getElementById("basket-products");
         this.badge = document.querySelector(".header-basket__icon__badge");
         this.badgeContent = document.querySelector(".header-basket__icon__badge__number");
+        this.tabCounts = document.querySelectorAll(".home-tabbar__count");
         this.allProductCostElement = document.querySelector(".modal-footer__text");
         this.images = document.querySelectorAll(".overlook__img");
         this.pageName = "index";
@@ -83,7 +84,7 @@ export class Basket {
 
         // Обновление бейджа корзины
 
-        this.badgeContent.textContent = this.productManager.productsTotalCount();
+        this.updateCounts();
 
         // Обновление общей стоимости товаров
         this.allProductCostElement.textContent = `${this.productManager.allProductsTotalPrice(this.productManager.priceOutputFn, 2)} грн`;
@@ -220,11 +221,27 @@ export class Basket {
         this.allProductCostElement.textContent = `${this.productManager.allProductsTotalPrice(this.productManager.priceOutputFn, 2)} грн`;
     }
 
+    updateCounts() {
+        const count = this.productManager.productsTotalCount();
+        if (this.badgeContent) this.badgeContent.textContent = count;
+        this.tabCounts.forEach((el) => {
+            el.textContent = count;
+            el.classList.toggle("is-on", count > 0);
+        });
+    }
+
     animateBadge() {
-        this.badge.classList.add("animated");
-        this.badge.addEventListener("animationend", () => {
-            this.badge.classList.remove("animated");
-        }, { once: true });
+        if (this.badge) {
+            this.badge.classList.add("animated");
+            this.badge.addEventListener("animationend", () => {
+                this.badge.classList.remove("animated");
+            }, { once: true });
+        }
+        this.tabCounts.forEach((el) => {
+            el.classList.remove("is-bump");
+            void el.offsetWidth;
+            el.classList.add("is-bump");
+        });
     }
 
     showOrHideLiqpayIcon(){

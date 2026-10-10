@@ -76,7 +76,7 @@ export class ProductManager {
     }
 
     productsTotalCount() {
-        return this.products.reduce((acc, cur) => acc + cur.quantity, 0);
+        return this.products.reduce((acc, cur) => acc + (Number(cur.quantity) || 0) + (Number(cur.preorder) || 0), 0);
     }
 
     currentProductTotalPrice(id, priceOutputFn, amountAfterQuote) {

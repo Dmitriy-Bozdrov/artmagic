@@ -54,12 +54,12 @@
             <a href="/">Головна</a>
             <button type="button" onclick="openNav()">Каталог</button>
             <button type="button" data-home-focus="search">Пошук</button>
-            <button type="button" data-bs-toggle="modal" data-bs-target="#basket__modal">Кошик</button>
+            <button type="button" class="home-tabbar__cart" data-bs-toggle="modal" data-bs-target="#basket__modal">Кошик<span class="home-tabbar__count"></span></button>
         </nav>
       {% endblock %}
       {% block js %}
         <script src="{% static 'js/category/category.js' %}"></script>
-        <script type="module" src="{% static 'js/category/category-carousel.js' %}?v=2"></script>
+        <script type="module" src="{% static 'js/category/category-carousel.js' %}?v=3"></script>
         <script type="application/ld+json">
             {
               "@context": "https://schema.org",

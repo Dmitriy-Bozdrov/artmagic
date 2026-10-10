@@ -1,4 +1,4 @@
-import { productManager, basket } from "./basket.js";
+import { productManager, basket } from "./basket.js?v=4";
 import "../../../node_modules/bootstrap/dist/js/bootstrap.bundle.js";
 import { basketModalCarousel } from "../header.js?v=2";
 const { MIN_2_LETTERS_UA, FIRST_LETTER_CAPITALISE_UA, EMAIL, PHONE_UA, REQUIRED, POSTAL_INDEX }  = regexp;

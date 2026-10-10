@@ -1,4 +1,4 @@
-import { basket, productManager } from "../header/basket/basket.js";
+import { basket, productManager } from "../header/basket/basket.js?v=4";
 
 const btn = document.querySelector(".product-details__btn__add-to-cart")
 

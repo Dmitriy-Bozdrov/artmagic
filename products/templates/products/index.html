@@ -81,11 +81,11 @@
     <a href="/" class="is-active">Головна</a>
     <button type="button" onclick="openNav()">Каталог</button>
     <button type="button" data-home-focus="search">Пошук</button>
-    <button type="button" data-bs-toggle="modal" data-bs-target="#basket__modal">Кошик</button>
+    <button type="button" class="home-tabbar__cart" data-bs-toggle="modal" data-bs-target="#basket__modal">Кошик<span class="home-tabbar__count"></span></button>
 </nav>
 {% endblock %}
 
 {% block js %}
     <script src="{% static 'js/index/index.js' %}?v=5"></script>
-    <script type="module" src="{% static 'js/index/index-carousel.js' %}?v=5"></script>
+    <script type="module" src="{% static 'js/index/index-carousel.js' %}?v=6"></script>
 {% endblock %}
