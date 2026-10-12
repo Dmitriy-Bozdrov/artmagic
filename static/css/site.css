@@ -269,18 +269,19 @@
   grid-row: 1;
   width: 100% !important;
   max-width: 100%;
-  height: auto !important;
+  /* no height:!important — Swiper autoHeight sets inline height */
 }
 
 .page-catalog .products-catalog__list {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
-  width: auto !important;
+  width: 100% !important;
   max-width: 100%;
   height: auto !important;
   margin: 0;
   padding: 0 0 16px;
+  box-sizing: border-box;
 }
 
 .page-catalog .products-catalog__item {
