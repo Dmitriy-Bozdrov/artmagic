@@ -159,6 +159,10 @@
   color: #1c1917;
 }
 
+.page-home .login__registration {
+  height: 410px;
+}
+
 .page-home .login__modal__form,
 .page-home .registration__modal__form,
 .page-home .call__modal__form {
@@ -166,7 +170,7 @@
   align-items: stretch;
   justify-content: flex-start;
   gap: 12px;
-  padding: 4px 4px 8px;
+  padding: 4px 4px 12px;
 }
 
 .page-home .login__modal__form input,
