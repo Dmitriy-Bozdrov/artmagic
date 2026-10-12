@@ -215,12 +215,14 @@
 
 .page-catalog .main-catalog__wrap {
   display: grid;
-  grid-template-columns: 250px minmax(0, 1fr);
+  grid-template-columns: 300px minmax(0, 1fr);
   grid-template-areas: "aside catalog";
   gap: 28px;
   align-items: start;
   width: min(1180px, calc(100% - 40px));
   margin: 8px auto 48px;
+  padding-left: 0;
+  padding-right: 0;
   overflow: visible;
 }
 
@@ -278,7 +280,7 @@
   max-width: 100%;
   height: auto !important;
   margin: 0;
-  padding: 8px 0 16px;
+  padding: 0 0 16px;
 }
 
 .page-catalog .products-catalog__item {
