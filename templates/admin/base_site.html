@@ -1,0 +1,74 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .order-new-badge {
+    display: inline-grid;
+    place-items: center;
+    min-width: 18px;
+    height: 18px;
+    margin-left: 6px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #e10600;
+    color: #fff !important;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    vertical-align: middle;
+  }
+  .order-new-badge[hidden] {
+    display: none !important;
+  }
+</style>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+{% if has_permission %}
+<script>
+  (function () {
+    const url = "{% url 'admin:carts_order_new_count' %}";
+    const titlePrefix = /^\(\d+\)\s/;
+
+    function paint(count) {
+      document.querySelectorAll("[data-order-badge]").forEach((badge) => {
+        badge.textContent = String(count);
+        badge.hidden = count < 1;
+      });
+      const baseTitle = document.title.replace(titlePrefix, "");
+      document.title = count > 0 ? "(" + count + ") " + baseTitle : baseTitle;
+    }
+
+    function refresh() {
+      fetch(url, { credentials: "same-origin", headers: { "X-Requested-With": "XMLHttpRequest" } })
+        .then((response) => response.ok ? response.json() : null)
+        .then((data) => {
+          if (data && typeof data.count === "number") paint(data.count);
+        })
+        .catch(() => {});
+    }
+
+    refresh();
+    setInterval(refresh, 15000);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") refresh();
+    });
+  })();
+</script>
+{% endif %}
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
+{% if user.is_anonymous %}
+  {% include "admin/color_theme_toggle.html" %}
+{% endif %}
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

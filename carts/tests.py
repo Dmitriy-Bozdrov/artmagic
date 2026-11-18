@@ -7,6 +7,7 @@ from datetime import timedelta
 from decimal import Decimal
 from unittest.mock import patch
 
+from django.contrib.auth import get_user_model
 from django.core import mail
 from django.core.management import call_command
 from django.db import connection, connections
@@ -965,3 +966,46 @@ class OneCSyncTests(TestCase):
             status=SyncRun.STATUS_SUCCESS,
         )
         self.assertFalse(is_sync_stale())
+
+
+@override_settings(**TEST_SETTINGS)
+class NewOrderBadgeTests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.admin = User.objects.create_superuser("badge-admin", "badge@example.com", "password123")
+        self.client.force_login(self.admin)
+
+    def make_order(self, status):
+        return Order.objects.create(
+            name="Покупець",
+            phone="0500000000",
+            email="buyer@example.com",
+            payment="Оплата за реквізитами",
+            address="Самовивіз",
+            total_price=Decimal("190.00"),
+            products=[],
+            status=status,
+        )
+
+    def test_sidebar_counts_only_new_orders(self):
+        self.make_order(Order.STATUS_NEW)
+        self.make_order(Order.STATUS_NEW)
+        self.make_order(Order.STATUS_PROCESSING)
+        page = self.client.get("/art-admin/")
+        self.assertContains(
+            page,
+            'class="order-new-badge" data-order-badge href="/art-admin/carts/order/?status__exact=new"',
+        )
+        self.assertContains(page, ">2</a>")
+        count = self.client.get("/art-admin/carts/order/new-count/")
+        self.assertEqual(count.status_code, 200)
+        self.assertEqual(count.json()["count"], 2)
+
+    def test_badge_stays_hidden_when_there_are_no_new_orders(self):
+        page = self.client.get("/art-admin/")
+        self.assertContains(page, 'data-order-badge href="/art-admin/carts/order/?status__exact=new" title="Нові замовлення" hidden>0</a>')
+
+    def test_count_requires_admin_login(self):
+        self.client.logout()
+        response = self.client.get("/art-admin/carts/order/new-count/")
+        self.assertEqual(response.status_code, 302)

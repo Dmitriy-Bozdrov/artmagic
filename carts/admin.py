@@ -1,10 +1,13 @@
 import json
 
 from django.contrib import admin
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.urls import path
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
+from carts.badge import new_orders_count
 from carts.checkout import cancel_order, mark_entered_in_1c, send_order_notifications
 from carts.models import (
     Cart,
@@ -72,6 +75,18 @@ class NotificationInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        return [
+            path(
+                "new-count/",
+                self.admin_site.admin_view(self.new_order_count_view),
+                name="carts_order_new_count",
+            ),
+        ] + super().get_urls()
+
+    def new_order_count_view(self, request):
+        return JsonResponse({"count": new_orders_count()})
+
     list_display = (
         "order_number", "status", "user", "name", "phone", "email", "payment",
         "total_price", "created_at", "entered_in_1c_at", "display_products",
