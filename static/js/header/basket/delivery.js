@@ -1,4 +1,4 @@
-import { formOrder } from "./order.js?v=3";
+import { formOrder } from "./order.js?v=5";
 
 document.addEventListener("DOMContentLoaded", () => {
     const notification = document.getElementById('notification');

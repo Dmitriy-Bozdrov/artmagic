@@ -76,6 +76,23 @@ class Form {
         return !this.validateField(fieldName, errorElem);
     }
 
+    isCheckoutFieldActive(fieldName) {
+        const field = this.getField(fieldName);
+        if (!field) return false;
+        const wrap = field.closest(".order__input__wrap");
+        return !wrap || !wrap.classList.contains("d-none");
+    }
+
+    clearFieldError(fieldName) {
+        const field = this.getField(fieldName);
+        const errorElem = this.errorMessageElement(fieldName);
+        if (field) field.classList.remove("invalid-input");
+        if (!errorElem) return;
+        errorElem.classList.remove("error-message");
+        errorElem.classList.add("error-message-hidden");
+        errorElem.textContent = "";
+    }
+
     validateField(fieldName, errorElem) {
         const field = this.getField(fieldName);
         const fieldValue = field.value;
@@ -149,13 +166,20 @@ class Form {
             let liqpayWindow = null;
             try {
                 let invalid = false;
+                const fieldErrors = [];
                 Object.keys(this.formData).forEach((key) => {
+                    if (this.formName === "Order" && !this.isCheckoutFieldActive(key)) {
+                        this.clearFieldError(key);
+                        return;
+                    }
                     if (this.triggerInput(key)) {
                         invalid = true;
+                        const message = this.errorMessageElement(key)?.textContent?.trim();
+                        if (message) fieldErrors.push(message);
                     }
                 });
                 if (invalid) {
-                    throw new Error("Будь ласка заповніть поля форми");
+                    throw new Error(fieldErrors[0] || "Будь ласка заповніть поля форми");
                 }
                 if (!this.selectedBasketObj.selectedDelivery || !this.selectedBasketObj.selectedPayment) {
                     throw new Error("Оберіть спосіб доставки та оплати");

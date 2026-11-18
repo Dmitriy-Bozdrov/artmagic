@@ -7,16 +7,19 @@ const formDataOrder = {
     fullName: "",
     clientPhone: "",
     email: "",
-    city: "",
     address: "",
     area: "",
+    city: "",
     department: "",
 }
 
 // Не забувати, що патерни можуть перекривати один одного
+const SELECTED_OPTION = /^(?!null$).+/;
+const NAME_LETTERS = /[A-Za-zА-Яа-яЁёІіЇїЄєҐґ]{2,}/;
+
 const patternsOrder = {
     fullName: [
-        { rule:  MIN_2_LETTERS_UA, errorMsg: "Мінімум 2 літери UA"},
+        { rule: NAME_LETTERS, errorMsg: "Мінімум 2 літери" },
     ],
     email: [
         { rule: EMAIL, errorMsg: "Неправильний email" }
@@ -27,7 +30,15 @@ const patternsOrder = {
     address: [
         { rule:  MIN_2_LETTERS_UA, errorMsg: "Мінімум 2 літери UA"},
     ],
-    city: [],
+    area: [
+        { rule: SELECTED_OPTION, errorMsg: "Оберіть область" },
+    ],
+    city: [
+        { rule: SELECTED_OPTION, errorMsg: "Оберіть місто" },
+    ],
+    department: [
+        { rule: SELECTED_OPTION, errorMsg: "Оберіть відділення або поштомат" },
+    ],
 };
 
 basket.renderBasket();
